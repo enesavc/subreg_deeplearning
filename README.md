@@ -6,10 +6,16 @@ The aim of this project is to show that the judicial use of formal language theo
 We conducted learning experiments with two types of Recurrent Neural Networks (RNNs) on six formal languages drawn from the Strictly Local (SL) and Strictly Piecewise (SP) classes. The networks were Simple RNNs (s-RNNs) and Long Short-Term Memory RNNs (LSTMs) of varying sizes. The SL and SP classes are among the simplest in a mathematically well-understood hierarchy of subregular classes. They encode local and long-term dependencies, respectively. The grammatical inference algorithm Regular Positive and Negative Inference (RPNI) provided a baseline.
 
 Here we share;
-* code for generating training and test data
-* the actual training and test data we generated (I guess this uses a lot of space?)
-* the code we used to run LSTMs (analysis 3)
-* the code we used to run sRNNs
-* the code for sRNN with SGD
-* the code we used to run RPNI
-* result summaries
+
+* Experimental Data
+  * code for generating training and test data
+  * the actual training and test data we generated
+  
+* Learning Algorithms
+  * the code for LSTM
+  * the code for sRNN with ADAM
+  * the code for sRNN with SGD
+  * the code we used to run RPNI
+  
+* Results
+  * result summaries
