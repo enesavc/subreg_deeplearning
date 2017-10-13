@@ -1,0 +1,299 @@
+#!/bin/bash 
+
+template=template.txt
+fomaSuffix=.tmp.foma
+fomaDir=foma/
+dataDir=data/
+
+fomaDefSLP='Exp(A,X,Y,Z) ~[X ?*] \& ~[?* Y ?*] \& ~[?* Z] \& A^LENGTH'
+fomaDefSLN='Exp(A,X,Y,Z) [X ?*] | [?* Y ?*] | [?* Z] \& A^LENGTH'
+fomaDefSPP='Exp(A,X) ~[?* <> X] \& A^LENGTH'
+fomaDefSPN='Exp(A,X) [?* <> X] \& A^LENGTH'
+fomaExpSL2='([a|b|c|d],[b],[a a|b b],[a])'
+fomaExpSL4='([a|b|c|d],[b b b],[a a a a|b b b b],[a a a])'
+fomaExpSL8='([a|b|c|d],[b b b b b b b],[a a a a a a a a|b b b b b b b b],[a a a a a a a])'
+fomaExpSP2='([a|b|c|d],[a b])'
+fomaExpSP4='([a|b|c|d],[a b b a])'
+fomaExpSP8='([a|b|c|d],[a b b a a b b a])'
+
+amount1k=20
+amount10k=200
+amount100k=2000
+
+TEST1LINE='define P (@txt"data\/LANGUAGE\/LANGUAGEKVAL\/SIZE\/LANGUAGEKVAL-SIZE-TYPE-Training-LENGTH.tmp.txt");'
+TEST1LINE0='define P (@txt"data\/LANGUAGE\/LANGUAGEKVAL\/SIZE\/LANGUAGEKVAL-SIZE-TYPE-Training-0LENGTH.tmp.txt");'
+
+declare -a arrlg=("SL" "SP" )
+declare -a arrkval=("2" "4" "8")
+declare -a arrkind=("Training" "Test1" "Test2")
+declare -a arrsize=("1k" "10k" "100k")
+declare -a arrtype=("P" "N")
+
+# declare -a arrlg=( "SL" )
+# declare -a arrkval=( "8" )
+# declare -a arrkind=( "Training" "Test1" "Test2" )
+# declare -a arrsize=( "10k" )
+# declare -a arrtype=( "P" "N" )
+
+writeMinLength () {  # the arguments are $1=$lg $2=$kval $3=$kind $4=type
+    
+    local xfilename=.minlength.tmp
+    case $3  in
+	Training)
+	    if [ "$4" = "P" ] 
+	    then echo 1 > $xfilename
+	    elif [ "$1" = "SL" ] 
+	    then echo $(( $2 - 1 )) > $xfilename
+	    else echo $2 > $xfilename
+	    fi
+	    ;;
+    	Test1)       
+	    echo $2 > $xfilename
+	    ;;
+	Test2)       
+	    echo 26 > $xfilename
+	    ;;
+	*)
+    esac 
+    
+}
+
+
+writeMaxLength () {  # the arguments are $1=$kind
+
+    local xfilename=.maxlength.tmp
+
+    if [ "$1" = "Test2" ] 
+    then echo 50 > $xfilename
+    else echo 25 > $xfilename
+    fi
+}
+
+
+writeAmountFactor () {  # the arguments are $1=$length $2=minlength $3=maxlength $4=$kval
+
+    local xfilename=.amountFactor.tmp
+
+    if [ "$1" = "$2" ] 
+    then echo $kval > $xfilename
+    elif [ "$1" = "$3" ] 
+    then echo 10 > $xfilename
+    else echo 1 > $xfilename
+    fi
+}
+
+writeAmountSize () {  # the arguments are $1=$size
+
+   local xfilename=.amountSize.tmp
+
+    case $1 in
+	1k)
+	    echo $amount1k > $xfilename
+	    ;;
+	10k)
+	    echo $amount10k > $xfilename
+	    ;;
+	100k)
+	    echo $amount100k > $xfilename
+	    ;;
+	*)
+    esac	    
+
+}
+
+
+writeMaxLines () {  # the arguments are $1=$size
+
+   local xfilename=.maxLines.tmp
+
+    case $1 in
+	1k)
+	    echo 500 > $xfilename
+	    ;;
+	10k)
+	    echo 5000 > $xfilename
+	    ;;
+	100k)
+	    echo 50000 > $xfilename
+	    ;;
+	*)
+    esac	    
+}
+
+
+writeLinesToDelete () {  # the arguments are $1=$kind
+
+    local xfilename=.sed.linesToDelete.tmp
+
+    if [ "$1" = "Test1" ] 
+    then echo 1,5d > $xfilename
+    else echo 1,4d > $xfilename
+    fi
+}
+
+
+
+generateWords () { # the arguments are $1=$type $2=textDir $3=$name $4=$kind $5=$length $6=$fomaScript
+
+    local fomaPfilename=$2$3-P-$4-$5.foma.txt
+    local fomaNfilename=$2$3-N-$4-$5.foma.txt	
+    local fomaP0filename=$2$3-P-$4-0$5.foma.txt
+    local fomaN0filename=$2$3-N-$4-0$5.foma.txt	
+
+    local xPfilename=$2$3-P-$4-$5.tmp.txt
+    local xNfilename=$2$3-N-$4-$5.tmp.txt	
+    local xP0filename=$2$3-P-$4-0$5.tmp.txt
+    local xN0filename=$2$3-N-$4-0$5.tmp.txt	
+
+    writeLinesToDelete $4
+    lines=`awk {print} .sed.linesToDelete.tmp`
+
+    if [ "$1" = "P" ] && [ $5 -gt 9 ]
+    then 
+	foma -f $fomaScript > $fomaPfilename
+	sed -e "$lines" < $fomaPfilename | tr -d [] | awk '{for(i=0;i<$1;i++)print $2}' | sed -e 's/$/\tTRUE/' > $xPfilename
+    elif [ "$1" = "N" ] && [ $5 -gt 9 ]
+    then
+	foma -f $fomaScript > $fomaNfilename
+	sed -e "$lines" < $fomaNfilename | tr -d [] | awk '{for(i=0;i<$1;i++)print $2}' | sed -e 's/$/\tFALSE/' > $xNfilename
+    elif [ "$1" = "P" ] && [ $5 -lt 10 ]
+    then
+	foma -f $fomaScript > $fomaP0filename
+	sed -e "$lines" < $fomaP0filename | tr -d [] | awk '{for(i=0;i<$1;i++)print $2}' | sed -e 's/$/\tTRUE/' > $xP0filename
+    elif [ "$1" = "N" ] && [ $5 -lt 10 ]
+    then
+	foma -f $fomaScript > $fomaN0filename
+	sed -e "$lines" < $fomaN0filename | tr -d [] | awk '{for(i=0;i<$1;i++)print $2}' | sed -e 's/$/\tFALSE/' > $xN0filename
+    fi
+
+}
+
+
+
+
+## now loop through the above array
+for lg in "${arrlg[@]}"
+do
+    for kval in "${arrkval[@]}"
+    do
+        for size in "${arrsize[@]}"
+        do
+            for kind in "${arrkind[@]}"
+            do
+		for type in "${arrtype[@]}"
+		do
+		    name=$lg$kval-$size
+		    textDir=$dataDir/$lg/$lg$kval/$size/
+		    scriptDir=$fomaDir$lg/$lg$kval/$size/
+
+		    writeMinLength $lg $kval $kind $type
+		    minlength=`awk {print} .minlength.tmp`
+		    writeMaxLength $kind
+		    maxlength=`awk {print} .maxlength.tmp`
+
+		    length=$minlength
+
+
+		    echo ===================================================
+		    echo ====== lg kval size kind minlength maxlength type
+		    echo ====== $lg $kval $size $kind $minlength $maxlength $type
+		    echo ===================================================
+
+		    until [ $length -gt $maxlength ]
+		    do
+
+			fomaScript=$scriptDir$name-$type-$kind-$length$fomaSuffix
+			cp $template $fomaScript
+
+			writeAmountFactor $length $minlength $maxlength $kval
+			amountFactor=`awk {print} .amountFactor.tmp`
+			writeAmountSize $size
+			amountSize=`awk {print} .amountSize.tmp`
+			amount=$(( $amountFactor * $amountSize ))
+
+			echo "$lg $kval $size $kind $type $minlength=$length=$maxlength $amount"
+
+		    	if [ "$kind" = "Test1" ] && [ $length -gt 9 ]
+		    	then
+	    	    	    sed -i "s/TEST1?/$TEST1LINE/g" $fomaScript
+		    	    sed -i "s/MINUSP?/- P/g" $fomaScript
+		    	elif [ "$kind" = "Test1" ] && [ $length -lt 10 ]
+			then
+	    	    	    sed -i "s/TEST1?/$TEST1LINE0/g" $fomaScript
+		    	    sed -i "s/MINUSP?/- P/g" $fomaScript
+			else
+		    	    sed -i "s/TEST1?//g" $fomaScript
+		    	    sed -i "s/MINUSP?//g" $fomaScript
+		    	fi
+			
+		    	case "$lg$type"  in
+		    	    SLP)       
+		    		sed -i "s/FUNCTION/$fomaDefSLP/g" $fomaScript
+		    		;;
+		    	    SLN)       
+		    		sed -i "s/FUNCTION/$fomaDefSLN/g" $fomaScript
+		    		;;
+		    	    SPP)       
+		    		sed -i "s/FUNCTION/$fomaDefSPP/g" $fomaScript
+		    		;;
+		    	    SPN)       
+		    		sed -i "s/FUNCTION/$fomaDefSPN/g" $fomaScript
+		    		;;
+		    	    *)
+		    	esac 
+			
+		    	case "$lg$kval"  in
+		    	    SL2)       
+		    		sed -i "s/<EXPRESSION>/$fomaExpSL2/g" $fomaScript
+		    		;;
+		    	    SL4)       
+		    		sed -i "s/<EXPRESSION>/$fomaExpSL4/g" $fomaScript
+		    		;;
+		    	    SL8)       
+		    		sed -i "s/<EXPRESSION>/$fomaExpSL8/g" $fomaScript
+		    		;;
+		    	    SP2)       
+		    		sed -i "s/<EXPRESSION>/$fomaExpSP2/g" $fomaScript
+		    		;;
+		    	    SP4)       
+		    		sed -i "s/<EXPRESSION>/$fomaExpSP4/g" $fomaScript
+		    		;;
+		    	    SP8)       
+		    		sed -i "s/<EXPRESSION>/$fomaExpSP8/g" $fomaScript
+		    		;;
+		    	    *)
+		    	esac 
+					
+			sed -i "s/LANGUAGE/$lg/g" $fomaScript
+			sed -i "s/KVAL/$kval/g" $fomaScript
+			sed -i "s/TYPE/$type/g" $fomaScript
+			sed -i "s/SIZE/$size/g" $fomaScript
+			sed -i "s/KIND/$kind/g" $fomaScript
+			sed -i "s/LENGTH/$length/g" $fomaScript
+			sed -i "s/AMOUNT/$amount/g" $fomaScript
+			
+			generateWords $type $textDir $name $kind $length $fomaScript
+
+			let length=length+1 
+			
+		    done
+
+		    writeMaxLines $size		    
+		    maxlines=`awk {print} .maxLines.tmp`		    
+
+		    if [ "$type" = "P" ]
+		    then
+		    	cat $textDir*-P-$kind*.tmp.txt | head -n $maxlines | sort -R > $textDir$name-P-$kind.txt
+		    else
+		    	cat $textDir*-N-$kind*.tmp.txt | head -n $maxlines | sort -R > $textDir$name-N-$kind.txt
+		    fi
+
+		done
+
+  	        cat $textDir$name-P-$kind.txt $textDir$name-N-$kind.txt > $textDir$name-$kind.txt
+
+            done
+        done
+    done
+done
+

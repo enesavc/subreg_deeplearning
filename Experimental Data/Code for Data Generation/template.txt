@@ -1,0 +1,11 @@
+#
+# foma script for LANGUAGE - KVAL - TYPE - SIZE - DATA - LENGTH 
+#
+
+define FUNCTION;
+define A [a|b|c|d];
+TEST1?
+define G Exp<EXPRESSION>;
+regex G MINUSP?;
+print random-words AMOUNT 
+clear stack
