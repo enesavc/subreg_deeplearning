@@ -16,6 +16,3 @@ Here we share;
   * the code for sRNN with ADAM
   * the code for sRNN with SGD
   * the code we used to run RPNI
-  
-* Results
-  * result summaries
