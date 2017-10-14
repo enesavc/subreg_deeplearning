@@ -1,5 +1,8 @@
 Description
 
+Please copy and paste RPNI.m and RPNI_OUTPUT.m files into the folder that was created with gi-toolbox https://code.google.com/archive/
+p/gitoolbox (Akram et al., 2010).
+
 RPNI starts from creating PTA according to positive samples. Initialize RED state set and
 BLUE state set as following:
 	(i). set start state as RED state and add it to RED set.
