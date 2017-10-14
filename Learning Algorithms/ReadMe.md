@@ -7,5 +7,11 @@ b. sRNN that uses ADAM as an optimization algorithm
 c. sRNN that uses SGD as an optimization algorithm
 
 d. RPNI Folder
-  (i). RPNI
-  (ii). RPNI_OUTPUT
+
+  (i). RPNI Guide
+  
+  (ii). RPNI Code (MatLab)
+  
+  (iii). RPNI_OUTPUT (MatLab)
+  
+  (iv). Foma Code that test RPNI Accuracy
