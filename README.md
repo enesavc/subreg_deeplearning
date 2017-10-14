@@ -23,11 +23,11 @@ Citation
 
 If you use the information on this page, you can use the following citation for attribution.
 
+Avcu, E., Shibata, C. & Heinz, J. 2017. Subregular Complexity and Deep Learning. In Proceedings of the Conference on Logic and Machine Learning in Natural Language (LaML).
+
 @inproceedings{subregdeep17,
 title={Subregular Complexity and Deep Learning},
 author={Enes Avcu and Chihiro Shibata and Jeffrey Heinz},
 booktitle={Proceedings of the Conference on Logic and Machine Learning in Natural Language (LaML)},
 year={2017},
 }
-
-Avcu, E., Shibata, C. & Heinz, J. 2017. Subregular Complexity and Deep Learning. In Proceedings of the Conference on Logic and Machine Learning in Natural Language (LaML).
