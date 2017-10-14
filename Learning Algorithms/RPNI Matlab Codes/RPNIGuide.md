@@ -52,4 +52,4 @@ Now you got a DFA learned from sample "input.txt".
 
 Our RPNI_OUTPUT function translates the output of RPNI algorithm to a foma readable .att file.
 Then, we load the .att file to foma by opening the foma. When the dfa is loaded to the stack, just trim the machine in order to get the minimized dfa.
-Finally when we run the foma test code, which tests the minimized dfa on our target test tests (test1 and test2), accuracy of the minimized dfa that is the output of RPNI can be shown on target test sets.
+Finally when we run the foma test code, which tests the minimized dfa on our target test sets (test1 and test2), accuracy of the minimized dfa that is the output of RPNI can be shown on target test sets.
