@@ -6,7 +6,7 @@ The aim of this project is to show that the judicial use of formal language theo
 The research paper, ”Subregular Complexity and Deep Learning”, authored by Enes Avcu (Department of Linguistics and Cognitive Science,
 University of Delaware, enesavc@udel.edu), Chihiro Shibata (School of Computer Science, Tokyo University of Technology, shibatachh@stf.teu.ac.jp) and Jeffrey Heinz (Department of Linguistics, Institute of Advanced Computational Science, Stony Brook University, jeffrey.heinz@stonybrook.edu), will be published online, with an ISSN, on the Centre for Linguistic Theory and Studies in Probability (CLASP) website. The current version of the paper can also be found on ArXiv (https://arxiv.org/abs/1705.05940).
 
-Avcu, E., Shibata, C. & Heinz, J. 2017. Subregular Complexity and Deep Learning. Proceedings of the Conference on Logic and Machine Learning in Natural Language (LaML).
+
 
 Here, on this Github page, we want to share our datasets and the RNNs codes so that anyone interested in this kind of research can replicate and go beyond our research. Following this aim, we try to explain how we generated our train and test datasets, what kinds of softwares and tool kits we have used, and what are the results of this research.
 
@@ -18,3 +18,16 @@ For each language, three training sets were prepared, and for each training set 
 Neural Network Architectures and the RPNI
 
 For the LSTMs and s-RNNs, we constructed simple networks to test the capability of the networks themselves. We implemented the RNNs with Chainer (http://chainer.org), and the RPNI was implemented using Matlab and the gi-toolbox https://code.google.com/archive/p/gitoolbox/ (Akram et al., 2010). In the Learning Algorithms folder, the code for LSTM, sRNN with ADAM, sRNN with SGD, and the codes we used to run RPNI can be found.
+
+Citation
+
+If you use the information on this page, you can use the following citation for attribution.
+
+@inproceedings{subregdeep17,
+title={Subregular Complexity and Deep Learning},
+author={Enes Avcu and Chihiro Shibata and Jeffrey Heinz},
+booktitle={Proceedings of the Conference on Logic and Machine Learning in Natural Language (LaML)},
+year={2017},
+}
+
+Avcu, E., Shibata, C. & Heinz, J. 2017. Subregular Complexity and Deep Learning. In Proceedings of the Conference on Logic and Machine Learning in Natural Language (LaML).
