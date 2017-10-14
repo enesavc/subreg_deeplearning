@@ -8,10 +8,8 @@ c. sRNN that uses SGD as an optimization algorithm
 
 d. RPNI Folder
 
-  (i). RPNI Guide
+  (i). RPNI Code (MatLab)
   
-  (ii). RPNI Code (MatLab)
+  (ii). RPNI_OUTPUT (MatLab)
   
-  (iii). RPNI_OUTPUT (MatLab)
-  
-  (iv). Foma Code that test RPNI Accuracy
+  (iii). Foma Code that test RPNI Accuracy
