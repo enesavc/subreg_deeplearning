@@ -1,4 +1,4 @@
-This folder contains three RNN codes and one folder that contains two MatLab codes for RPNI:
+This folder contains three RNN codes and one folder that contains the information to run the RPNI and check its accuracy on target stringsets:
 
 a. LSTM code
 
