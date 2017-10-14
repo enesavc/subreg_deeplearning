@@ -1,0 +1,76 @@
+#!/bin/bash
+#This script test Foma
+arr=( *.txt )
+
+#echo ${#arr[@]} # will echo number of elements in array
+#echo "${arr[@]}" # will dump all elements of the array
+
+for i in "${arr[@]}" ;do
+  #echo Next: $i
+  oldIFS="$IFS"
+  IFS=$'\n' samples=($(<$i))
+  IFS="$oldIFS"
+  
+counter=0
+truecount=0
+falsecount=0
+ttcount=0
+tfcount=0
+ftcount=0
+ffcount=0
+
+for j in "${samples[@]}" ;do
+
+js=( $j )
+newj=${js[0]}
+jTrueOrFalse=${js[1]}
+
+#echo $jTrueOrFalse 
+# Grammar is defined here in this line.
+	str="$( foma -e "read att SL8100k.fsa.att" -e "define T;" -e "regex T.r.r;" -e "apply down $newj" -e "quit")"
+	#echo $str
+	if [[ $str == *"???"* ]]
+	then
+	
+	 	 #echo "$newj False" >> "TestResult$i"
+	 	let falsecount=$falsecount+1
+		if [[ $jTrueOrFalse == *"FALSE"* ]]
+		then
+			let ftcount=$ftcount+1
+		else
+			let ffcount=$ffcount+1
+		fi
+	 else
+	 	let truecount=$truecount+1
+
+	 	if [[ $jTrueOrFalse == *"TRUE"* ]]
+	 	then
+			let ttcount=$ttcount+1
+		else
+			let tfcount=$tfcount+1
+
+		fi
+	 	 #echo "$newj True" >> "TestResult$i"
+	fi
+	
+let counter=$counter+1
+echo $counter
+
+done
+# If node is not installed, please sudo apt -get install nodejs-legacy
+nresult=($ttcount+$ftcount)/$counter*100
+Result=$(node -pe $nresult)
+printf 'TRUE-POS: %d \n' $ttcount 
+printf 'TRUE-NEG: %d \n' $tfcount 
+printf 'FALSE-POS: %d \n' $ftcount  
+printf 'FALSE-NEG: %d \n' $ffcount 
+
+#If shell says printf: $result: invalid number
+#export LC_NUMERIC="en_US.UTF-8" command will be executed
+
+printf 'Result: %% %.2f ACC\n' $Result
+
+#printf 'Result: %% %.2f True\n' $Result  >> "TestResult$i"
+
+done
+
