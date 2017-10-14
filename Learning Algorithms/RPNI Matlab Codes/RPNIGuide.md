@@ -17,14 +17,23 @@ In order to make your program runnable, you should follow the format of input sa
 The input data should look like this:
 
 8 2
+
 1 3 a a a
+
 1 4 a a b a
+
 1 3 b b a
+
 1 5 b b a b a
+
 0 1 a
+
 0 2 b b
+
 0 3 a a b
+
 0 3 a b a
+
 
 The header line indicates the total number of samples (here is 8) and the number of different alphabets (here is 2).
 Then each line represents a sample, the first bit of which indicate if it's positive sample (1) or negative (0), 
