@@ -19,6 +19,10 @@ Neural Network Architectures and the RPNI
 
 For the LSTMs and s-RNNs, we constructed simple networks to test the capability of the networks themselves. We implemented the RNNs with Chainer (http://chainer.org), and the RPNI was implemented using Matlab and the gi-toolbox https://code.google.com/archive/p/gitoolbox/ (Akram et al., 2010). In the Learning Algorithms folder, the code for LSTM, sRNN with ADAM, sRNN with SGD, and the codes we used to run RPNI can be found.
 
+Results
+
+Result folder contains some partial results, for more information about the results please refer to the research paper. The tables in the result html files shows the mean accuracy results on each test set, along with the standard deviation.
+
 Citation
 
 If you use the information on this page, you can use the following citation for attribution.
